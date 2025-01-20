@@ -18,7 +18,7 @@ local Options = Find(({...})) or {
 local Version = '1.5'
 local Parent = gethui() or game:GetService('CoreGui');
 local require = function(Name)
-	return loadstring(game:HttpGet(('https://raw.githubusercontent.com/Zv-yz/AutoJJs/main/%s.lua'):format(Name)))()
+	return loadstring(game:HttpGet(('https://raw.githubusercontent.com/GhosTSparta1/Auto-JJ-s/main/%s.lua'):format(Name)))()
 end
 
 -- ══════════════════════════════════════
@@ -92,7 +92,6 @@ local function DoJJ(n, prefix, jump)
 	local success, extenso = Extenso:Convert(n)
 	local prefix = prefix and prefix or ''
 	if success then
-		--> Em minha opiniao, esse codigo ta horrivel - Zv_yz
 		if jump then Char:Jump() end
 		if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
 			for i = 1, #extenso do
@@ -100,10 +99,21 @@ local function DoJJ(n, prefix, jump)
 				RemoteChat:Send(('%s'):format(extenso:sub(i, i)))
 				task.wait(Options.Tempo)
 			end
-			if jump then Char:Jump() end -- lol why 2
+			if jump then Char:Jump() end
 			RemoteChat:Send(('%s'):format(extenso .. prefix))
 		elseif table.find(Options.Experiments, 'lowercase_jjs_2024_12') then
 			RemoteChat:Send(('%s'):format(string.lower(extenso) .. prefix))
+		elseif table.find(Options.Experiments, 'kangaroo_jjs_2024_01') then
+			-- Kangaroo Experiment: Fala o número por extenso, e faz o pulo com rotação.
+			RemoteChat:Send(('%s'):format(extenso .. prefix))
+			task.wait(Options.Tempo) -- Pausa entre a fala e a ação
+			for i = 1, n do
+				-- Realiza o pulo com rotação
+				local randomRotation = math.random(358, 362)
+				Char:Jump()
+				Char:SetRotation(Vector3.new(0, randomRotation, 0))
+				task.wait(Options.Tempo)
+			end
 		else
 			RemoteChat:Send(('%s'):format(extenso .. prefix))
 		end
@@ -117,7 +127,6 @@ local function StartThread()
 	if Notification then Notification:Notify(5, nil, nil, nil) end
 	Threading = task.spawn(function()
 		for i = Config.Start, Config.End do
-			--> bro wth, this code looks so bad :sob: - Zv_yz
 			if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
 				DoJJ(i, Config["Prefix"], Settings["Jump"])
 			else
