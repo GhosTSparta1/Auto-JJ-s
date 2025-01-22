@@ -92,36 +92,22 @@ local function DoJJ(n, prefix, jump)
 	local success, extenso = Extenso:Convert(n)
 	local prefix = prefix and prefix or ''
 	if success then
-		-- Envia a mensagem por extenso no chat
 		RemoteChat:Send(('%s'):format(extenso .. prefix))
 
-		-- Experimento: hell_jacks_2024_02-dev
-		if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
-			for i = 1, #extenso do
-				if jump then Char:Jump() end
-				RemoteChat:Send(('%s'):format(extenso:sub(i, i)))
-				task.wait(Options.Tempo)
-			end
-			if jump then Char:Jump() end
-			RemoteChat:Send(('%s'):format(extenso .. prefix))
-
-		-- Experimento: kangaroo_jjs_2024_01
-		elseif table.find(Options.Experiments, 'kangaroo_jjs_2024_01') then
-			-- Pressiona a tecla "C" duas vezes
+		if table.find(Options.Experiments, 'kangaroo_jjs_2024_01') then
 			for _ = 1, 2 do
 				Char:PressKey("C")
-				task.wait(0.2) -- Breve intervalo entre os pressionamentos
+				task.wait(0.2)
 			end
-
-			-- Realiza um pulo com rotação aleatória
-			Char:Jump()
-			local rotation = math.random(358, 362) -- Rotação entre 358° e 362°
-			Char:SetRotation(rotation)
-
-			-- Aguarda antes de continuar
+			if jump then
+				Char:Jump()
+				local rotation = math.random(358, 362)
+				Char:SetRotation(rotation)
+			end
 			task.wait(Options.Tempo)
 		else
 			RemoteChat:Send(('%s'):format(extenso .. prefix))
+			if jump then Char:Jump() end
 		end
 	end
 end
@@ -133,8 +119,7 @@ local function StartThread()
 	if Notification then Notification:Notify(5, nil, nil, nil) end
 	Threading = task.spawn(function()
 		for i = Config.Start, Config.End do
-			--> bro wth, this code looks so bad :sob: - Zv_yz
-			if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
+			if table.find(Options.Experiments, 'kangaroo_jjs_2024_01') then
 				DoJJ(i, Config["Prefix"], Settings["Jump"])
 			else
 				task.spawn(DoJJ, i, Config["Prefix"], Settings["Jump"])
