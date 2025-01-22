@@ -92,7 +92,8 @@ local function DoJJ(n, prefix, jump)
 	local success, extenso = Extenso:Convert(n)
 	local prefix = prefix and prefix or ''
 	if success then
-		if jump then Char:Jump() end
+		-- Envia a mensagem por extenso no chat
+		RemoteChat:Send(('%s'):format(extenso .. prefix))
 
 		-- Experimento: hell_jacks_2024_02-dev
 		if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
@@ -106,14 +107,19 @@ local function DoJJ(n, prefix, jump)
 
 		-- Experimento: kangaroo_jjs_2024_01
 		elseif table.find(Options.Experiments, 'kangaroo_jjs_2024_01') then
-			RemoteChat:Send(('%s'):format(extenso .. prefix))
+			-- Pressiona a tecla "C" duas vezes
 			for _ = 1, 2 do
-				Char:PressKey("C") -- Pressiona "C" duas vezes
-				task.wait(0.2) -- Breve intervalo entre as ações
+				Char:PressKey("C")
+				task.wait(0.2) -- Breve intervalo entre os pressionamentos
 			end
+
+			-- Realiza um pulo com rotação aleatória
 			Char:Jump()
-			local rotation = math.random(358, 362)
-			Char:SetRotation(rotation) -- Define rotação entre 358° e 362°
+			local rotation = math.random(358, 362) -- Rotação entre 358° e 362°
+			Char:SetRotation(rotation)
+
+			-- Aguarda antes de continuar
+			task.wait(Options.Tempo)
 		else
 			RemoteChat:Send(('%s'):format(extenso .. prefix))
 		end
@@ -127,7 +133,8 @@ local function StartThread()
 	if Notification then Notification:Notify(5, nil, nil, nil) end
 	Threading = task.spawn(function()
 		for i = Config.Start, Config.End do
-			if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') or table.find(Options.Experiments, 'kangaroo_jjs_2024_01') then
+			--> bro wth, this code looks so bad :sob: - Zv_yz
+			if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
 				DoJJ(i, Config["Prefix"], Settings["Jump"])
 			else
 				task.spawn(DoJJ, i, Config["Prefix"], Settings["Jump"])
