@@ -18,7 +18,7 @@ local Options = Find(({...})) or {
 local Version = '1.5'
 local Parent = gethui() or game:GetService('CoreGui');
 local require = function(Name)
-        return loadstring(game:HttpGet(('https://raw.githubusercontent.com/GhosTSparta1/Auto-JJ-s/main/%s.lua'):format(Name)))()
+        return loadstring(game:HttpGet(('https://raw.githubusercontent.com/Zv-yz/AutoJJs/main/%s.lua'):format(Name)))()
 end
 
 -- ══════════════════════════════════════
@@ -109,6 +109,22 @@ local function DoJJ(n, prefix, jump)
         end
 end
 
+local function DoKangorooJacks(n, prefix, jump)
+    local success, extenso = Extenso:Convert(n)
+    local prefix = prefix and prefix or ''
+    if success then
+        if jump then Char:Jump() end
+        Char:PressKey("C")
+        task.wait(0.1)
+        Char:PressKey("C")
+        task.wait(0.1)
+        Char:Jump()
+        task.wait(0.2)
+        Char:Rotate(360)
+        RemoteChat:Send(('%s'):format(extenso .. prefix))
+    end
+end
+
 local function StartThread()
         local Config = Settings.Config;
         if not Config["Start"] or not Config["End"] then return end
@@ -118,6 +134,8 @@ local function StartThread()
                 for i = Config.Start, Config.End do
                         if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
                                 DoJJ(i, Config["Prefix"], Settings["Jump"])
+                        elseif table.find(Options.Experiments, 'kangoroo_jacks_2025_02-dev') then
+                                DoKangorooJacks(i, Config["Prefix"], Settings["Jump"])
                         else
                                 task.spawn(DoJJ, i, Config["Prefix"], Settings["Jump"])
                         end
@@ -184,54 +202,20 @@ UIElements["Circle"].MouseButton1Click:Connect(function()
         end
 end)
 
-local function DoKangorooJacks(n, prefix, jump)
-    local success, extenso = Extenso:Convert(n)
-    local prefix = prefix and prefix or ''
-    if success then
-        if jump then Char:Jump() end
-        Char:PressKey("C")
-        task.wait(0.1)
-        Char:PressKey("C")
-        task.wait(0.1)
-        Char:Jump()
-        task.wait(0.2)
-        Char:Rotate(360)
-        RemoteChat:Send(('%s'):format(extenso .. prefix))
-    end
-end
-
-local function StartKangorooJacks()
-    local Config = Settings.Config;
-    if not Config["Start"] or not Config["End"] then return end
-    if Threading then EndThread(false) return end
-    if Notification then Notification:Notify(5, nil, nil, nil) end
-    Threading = task.spawn(function()
-        for i = Config.Start, Config.End do
-            task.spawn(DoKangorooJacks, i, Config["Prefix"], Settings["Jump"])
-            if i ~= tonumber(Config.End) then task.wait(Options.Tempo) end
-        end
-        FinishedThread = true
-        EndThread(true)
-    end)
-end
-
 UIElements["Play"].MouseButton1Up:Connect(function()
-    if not Settings.Config["Start"] or not Settings.Config["End"] then return end
-    if not Settings["Started"] then
-        Settings["Started"] = true
-        if table.find(Options.Experiments, 'kangoroo_jacks_2025_02-dev') then
-            StartKangorooJacks()
+        if not Settings.Config["Start"] or not Settings.Config["End"] then return end
+        if not Settings["Started"] then
+                Settings["Started"] = true
+                StartThread()
         else
-            StartThread()
+                Settings["Started"] = false
+                EndThread(false)
         end
-    else
-        Settings["Started"] = false
-        EndThread(false)
-    end
 end)
 
 if Notification then
-    Notification:SetupJJs(Options.Experiments)
+        table.insert(Options.Experiments, 'kangoroo_jacks_2025_02-dev')
+        Notification:SetupJJs(Options.Experiments)
 end
 
 Request:Post('https://scripts-zvyz.glitch.me/api/count')
