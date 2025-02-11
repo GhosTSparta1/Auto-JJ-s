@@ -92,27 +92,15 @@ local function DoJJ(n, prefix, jump)
         local success, extenso = Extenso:Convert(n)
         local prefix = prefix and prefix or ''
         if success then
+                --> Em minha opiniao, esse codigo ta horrivel - Zv_yz
                 if jump then Char:Jump() end
-                if table.find(Options.Experiments, 'kangoroo_jacks_2025_01-dev') then
-                        -- Pressionar "C" duas vezes
-                        Char:PressKey('C')
-                        Char:PressKey('C')
-                        task.wait(0.2)
-                        -- Pular
-                        Char:Jump()
-                        task.wait(0.3)
-                        -- Dar um 360 no ar
-                        Char:Rotate(360)
-                        task.wait(0.3)
-                        -- Enviar texto por extenso
-                        RemoteChat:Send(('%s'):format(extenso .. prefix))
-                elseif table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
+                if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
                         for i = 1, #extenso do
                                 if jump then Char:Jump() end
                                 RemoteChat:Send(('%s'):format(extenso:sub(i, i)))
                                 task.wait(Options.Tempo)
                         end
-                        if jump then Char:Jump() end
+                        if jump then Char:Jump() end -- lol why 2
                         RemoteChat:Send(('%s'):format(extenso .. prefix))
                 elseif table.find(Options.Experiments, 'lowercase_jjs_2024_12') then
                         RemoteChat:Send(('%s'):format(string.lower(extenso) .. prefix))
@@ -129,6 +117,7 @@ local function StartThread()
         if Notification then Notification:Notify(5, nil, nil, nil) end
         Threading = task.spawn(function()
                 for i = Config.Start, Config.End do
+                        --> bro wth, this code looks so bad :sob: - Zv_yz
                         if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
                                 DoJJ(i, Config["Prefix"], Settings["Jump"])
                         else
