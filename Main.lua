@@ -92,7 +92,6 @@ local function DoJJ(n, prefix, jump)
         local success, extenso = Extenso:Convert(n)
         local prefix = prefix and prefix or ''
         if success then
-                --> Em minha opiniao, esse codigo ta horrivel - Zv_yz
                 if jump then Char:Jump() end
                 if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
                         for i = 1, #extenso do
@@ -100,7 +99,7 @@ local function DoJJ(n, prefix, jump)
                                 RemoteChat:Send(('%s'):format(extenso:sub(i, i)))
                                 task.wait(Options.Tempo)
                         end
-                        if jump then Char:Jump() end -- lol why 2
+                        if jump then Char:Jump() end
                         RemoteChat:Send(('%s'):format(extenso .. prefix))
                 elseif table.find(Options.Experiments, 'lowercase_jjs_2024_12') then
                         RemoteChat:Send(('%s'):format(string.lower(extenso) .. prefix))
@@ -117,7 +116,6 @@ local function StartThread()
         if Notification then Notification:Notify(5, nil, nil, nil) end
         Threading = task.spawn(function()
                 for i = Config.Start, Config.End do
-                        --> bro wth, this code looks so bad :sob: - Zv_yz
                         if table.find(Options.Experiments, 'hell_jacks_2024_02-dev') then
                                 DoJJ(i, Config["Prefix"], Settings["Jump"])
                         else
@@ -186,19 +184,54 @@ UIElements["Circle"].MouseButton1Click:Connect(function()
         end
 end)
 
-UIElements["Play"].MouseButton1Up:Connect(function()
-        if not Settings.Config["Start"] or not Settings.Config["End"] then return end
-        if not Settings["Started"] then
-                Settings["Started"] = true
-                StartThread()
-        else
-                Settings["Started"] = false
-                EndThread(false)
+local function DoKangorooJacks(n, prefix, jump)
+    local success, extenso = Extenso:Convert(n)
+    local prefix = prefix and prefix or ''
+    if success then
+        if jump then Char:Jump() end
+        Char:PressKey("C")
+        task.wait(0.1)
+        Char:PressKey("C")
+        task.wait(0.1)
+        Char:Jump()
+        task.wait(0.2)
+        Char:Rotate(360)
+        RemoteChat:Send(('%s'):format(extenso .. prefix))
+    end
+end
+
+local function StartKangorooJacks()
+    local Config = Settings.Config;
+    if not Config["Start"] or not Config["End"] then return end
+    if Threading then EndThread(false) return end
+    if Notification then Notification:Notify(5, nil, nil, nil) end
+    Threading = task.spawn(function()
+        for i = Config.Start, Config.End do
+            task.spawn(DoKangorooJacks, i, Config["Prefix"], Settings["Jump"])
+            if i ~= tonumber(Config.End) then task.wait(Options.Tempo) end
         end
+        FinishedThread = true
+        EndThread(true)
+    end)
+end
+
+UIElements["Play"].MouseButton1Up:Connect(function()
+    if not Settings.Config["Start"] or not Settings.Config["End"] then return end
+    if not Settings["Started"] then
+        Settings["Started"] = true
+        if table.find(Options.Experiments, 'kangoroo_jacks_2025_02-dev') then
+            StartKangorooJacks()
+        else
+            StartThread()
+        end
+    else
+        Settings["Started"] = false
+        EndThread(false)
+    end
 end)
 
 if Notification then
-        Notification:SetupJJs(Options.Experiments)
+    Notification:SetupJJs(Options.Experiments)
 end
 
 Request:Post('https://scripts-zvyz.glitch.me/api/count')
